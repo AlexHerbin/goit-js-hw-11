@@ -36,17 +36,17 @@ async function onSearch(e) {
     imageApiService.resetPage();
 
     try {
-        const images = await imageApiService.fetchImage();
-        totalPages =  images.totalPages;
-        Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
-        clearGallery();
-        renderGallery(images);
-        loadMoreBtn.enable();
+            const images = await imageApiService.fetchImage();
+            totalPages =  images.totalPages;
+            Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
+            clearGallery();
+            renderGallery(images);
+            loadMoreBtn.enable();
     } catch (error) {
         fetchError();
     };
 
-    // return totalPages;  
+    return totalPages;  
 }
 
 
@@ -57,14 +57,13 @@ async function fetchGallery() {
             imageApiService.incrementPage();
             const images = await imageApiService.fetchImage();
             totalPages = images.totalPages;
-            
+            renderGallery(images);
+            loadMoreBtn.enable();
+        
             if (imageApiService.page > totalPages) {
                 loadMoreBtn.hide();
                 return Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
             }
-
-            renderGallery(images);
-            loadMoreBtn.enable();
         } catch (error) {
         fetchError();
     };
